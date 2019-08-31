@@ -44,9 +44,9 @@
  **      3ab.1 Cols should appear before Rows
  **   3c. DatHeader=
  **      3c.1 On the DatHeader line there should appear a
- **          string with the final characters ".1sq". We
+ **          string with the final characters "sq". We
  **          will assume that this is the name of the 
- **          CDF file (trim off the ".1sq")
+ **          CDF file (trim off the "sq")
  **
  ** 4. In the [INTENSITY] section there should be 
  **   4a. A line beginning "CellHeader="
@@ -1164,14 +1164,14 @@ static char *get_header_info(const char *filename, int *dim1, int *dim2){
   findStartsWith(currentFile,"DatHeader",buffer);
   cur_tokenset = tokenize(buffer," ");
   for (i =0; i < tokenset_size(cur_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(cur_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(cur_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */
       
-      cdfName= Calloc(endpos+1,char);
+      cdfName= Calloc(endpos-1,char);
       strncpy(cdfName,get_token(cur_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -1259,14 +1259,14 @@ static void get_detailed_header_info(const char *filename, detailed_header_info 
   /* now pull out the actual cdfname */ 
   cur_tokenset = tokenize(buffer," ");
   for (i =0; i < tokenset_size(cur_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(cur_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(cur_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */
       
-      header_info->cdfName= Calloc(endpos+1,char);
+      header_info->cdfName= Calloc(endpos-1,char);
       strncpy( header_info->cdfName,get_token(cur_tokenset,i),endpos);
-       header_info->cdfName[endpos] = '\0';
+       header_info->cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -1953,14 +1953,14 @@ static char *gz_get_header_info(const char *filename, int *dim1, int *dim2){
   gzfindStartsWith(currentFile,"DatHeader",buffer);
   cur_tokenset = tokenize(buffer," ");
   for (i =0; i < tokenset_size(cur_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(cur_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(cur_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */
       
-      cdfName= Calloc(endpos+1,char);
+      cdfName= Calloc(endpos-1,char);
       strncpy(cdfName,get_token(cur_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName[endpos-2] = '\0';
 
       break;
     }
@@ -2050,14 +2050,14 @@ static void gz_get_detailed_header_info(const char *filename, detailed_header_in
   /* now pull out the actual cdfname */ 
   cur_tokenset = tokenize(buffer," ");
   for (i =0; i < tokenset_size(cur_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(cur_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(cur_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */
       
-      header_info->cdfName= Calloc(endpos+1,char);
+      header_info->cdfName= Calloc(endpos-1,char);
       strncpy( header_info->cdfName,get_token(cur_tokenset,i),endpos);
-       header_info->cdfName[endpos] = '\0';
+       header_info->cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -2589,13 +2589,13 @@ static char *binary_get_header_info(const char *filename, int *dim1, int *dim2){
   my_tokenset = tokenize(my_header->header," ");
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      cdfName= Calloc(endpos+1,char);
-      strncpy(cdfName,get_token(my_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName= Calloc(endpos-1,char);
+      strncpy(cdfName,get_token(my_tokenset,i),endpos-2);
+      cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -2730,13 +2730,13 @@ static void binary_get_detailed_header_info(const char *filename, detailed_heade
   my_tokenset = tokenize(header_copy," ");
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      header_info->cdfName= Calloc(endpos+1,char);
-      strncpy(header_info->cdfName,get_token(my_tokenset,i),endpos);
-      header_info->cdfName[endpos] = '\0';
+      header_info->cdfName= Calloc(endpos-1,char);
+      strncpy(header_info->cdfName,get_token(my_tokenset,i),endpos-2);
+      header_info->cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -2800,13 +2800,13 @@ static int check_binary_cel_file(const char *filename, const char *ref_cdfName, 
 
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      cdfName= Calloc(endpos+1,char);
-      strncpy(cdfName,get_token(my_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName= Calloc(endpos-1,char);
+      strncpy(cdfName,get_token(my_tokenset,i),endpos-2);
+      cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -3340,13 +3340,13 @@ static char *gzbinary_get_header_info(const char *filename, int *dim1, int *dim2
   my_tokenset = tokenize(my_header->header," ");
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      cdfName= Calloc(endpos+1,char);
-      strncpy(cdfName,get_token(my_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName= Calloc(endpos-1,char);
+      strncpy(cdfName,get_token(my_tokenset,i),endpos-2);
+      cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -3479,13 +3479,13 @@ static void gzbinary_get_detailed_header_info(const char *filename, detailed_hea
   my_tokenset = tokenize(header_copy," ");
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      header_info->cdfName= Calloc(endpos+1,char);
-      strncpy(header_info->cdfName,get_token(my_tokenset,i),endpos);
-      header_info->cdfName[endpos] = '\0';
+      header_info->cdfName= Calloc(endpos-1,char);
+      strncpy(header_info->cdfName,get_token(my_tokenset,i),endpos-2);
+      header_info->cdfName[endpos-2] = '\0';
       
       break;
     }
@@ -3539,13 +3539,13 @@ static int check_gzbinary_cel_file(const char *filename, const char *ref_cdfName
 
     
   for (i =0; i < tokenset_size(my_tokenset);i++){
-    /* look for a token ending in ".1sq" */
-    endpos=token_ends_with(get_token(my_tokenset,i),".1sq");
+    /* look for a token ending in "sq" */
+    endpos=token_ends_with(get_token(my_tokenset,i),"sq");
     if(endpos > 0){
       /* Found the likely CDF name, now chop of .1sq and store it */      
-      cdfName= Calloc(endpos+1,char);
-      strncpy(cdfName,get_token(my_tokenset,i),endpos);
-      cdfName[endpos] = '\0';
+      cdfName= Calloc(endpos-1,char);
+      strncpy(cdfName,get_token(my_tokenset,i),endpos-2);
+      cdfName[endpos-2] = '\0';
       
       break;
     }
